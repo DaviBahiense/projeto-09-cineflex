@@ -15,6 +15,7 @@ export default function App(){
                <Route path="/film" element={<Film />}></Route>
                <Route path="/session" element={<Session />}></Route>
                <Route path="/Success" element={<Sucess />}></Route>
+               
             </Routes>
         </BrowserRouter>
         
