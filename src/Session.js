@@ -1,23 +1,41 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import styled from 'styled-components';
 
-export default function Session(){
+export default function Session({ film }){
 
-    const [seats, setSeats] = useState([])
     const { idSessao } = useParams()
-
+    const [seats, setSeats] = useState([])
+    /* console.log(film[idSessao].title) */
+    
     useEffect(() => {
         const promisse = axios.get(`https://mock-api.driven.com.br/api/v4/cineflex/showtimes/${idSessao}/seats`)
         promisse.then(response => {
-            setSeats(response.data.seats)  
-           /*  seats.forEach(seat => {
-            }); */
-                seats.isSelected = false;
+            setSeats(response.data.seats) 
+           
         })
     }, [])
 
-    const [clicked, setClicked] = useState(false);
+
+function Assent({ children, avalible}){
+    const [selected, setSelected] = useState(false)
+
+    return(
+        <Contain
+            
+            selected={selected}
+            avalible ={avalible}
+            onClick ={() => {
+                if(avalible) selected ? setSelected(false) : setSelected(true)
+                else alert("Não disponivel")
+            }}
+        >
+            {children}
+        </Contain>
+    )
+}
 
     return(
         <>
@@ -26,16 +44,10 @@ export default function Session(){
         </div>
         <div className="containSit">
             {seats.map((info)=>(
-                <div className={
-                `
-                sit 
-                ${(!info.isAvailable) && 'unavailable'} 
-                ${(!info.isSelected) && ' selected'}
-                ${clicked && 'selected'}
-                `
-            } 
-                onClick={()=> setClicked(true)}
-                key={info.id} >{info.name}</div>
+                <Assent avalible={info.isAvailable} key={info.id}>
+                {info.name}
+                   
+                </Assent>
             ))}
         </div>
         <legend>
@@ -67,7 +79,8 @@ export default function Session(){
         </div>
         <footer>
             <div className="molding">
-                <img src="./img/image6.png" alt="" />
+              
+                <img src="" alt="" />
             </div>
             <div className="span">
                 <span>Enola Holmes</span>
@@ -75,7 +88,16 @@ export default function Session(){
             </div>
         </footer>
         </>
-        
     )
-   
 }
+
+const Contain = styled.button`
+height: 26px;
+width: 26px;
+display: flex;
+justify-content: center;
+align-items: center;
+border: none;
+border-radius: 12px;
+background: ${(props) => props.selected ? "#8DD7CF" : props.avalible ? "#C3CFD9" : "#FBE192"};
+margin: 0 7px 18px 0;`

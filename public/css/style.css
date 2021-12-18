@@ -71,6 +71,8 @@
 
     }
     .hour{
+      width: 83px;
+      height: 43px;
       margin-top: 24px;
       margin-bottom: 24px;
     }
@@ -89,7 +91,7 @@
       letter-spacing: 0.02em;
       text-align: center;
     }
-    .hour button{
+     button .hour{
       width: 83px;
       height: 43px;
     }

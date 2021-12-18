@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 
 export default function Film({ film }) {
-
+   
     const { idFilme } = useParams()
     const [session, setSession] = useState([])
 
@@ -35,9 +35,9 @@ export default function Film({ film }) {
             </div>
             <footer>
                 <div className="molding">
-                    <img src="./img/image6.png" alt="" />
+                    <img src={film[idFilme].posterURL} alt="" />
                 </div>
-                <span>Enola Holmes</span>
+                <span>{film[idFilme].title}</span>
             </footer>
         </>
     )

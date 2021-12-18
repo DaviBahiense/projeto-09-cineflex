@@ -18,6 +18,7 @@ export default function App() {
             setFilm(f.data)
         )
     }, [])
+    
 
     if (film.length === 0) {
         return ''
@@ -28,8 +29,8 @@ export default function App() {
             <Top />
             <Routes>
                 <Route path="/" element={<Main film={film} />}></Route>
-                <Route path="/sessoes/:idFilme" element={<Film />}></Route>
-                <Route path="/assentos/:idSessao" element={<Session />}></Route>
+                <Route path="/sessoes/:idFilme" element={<Film film={film}/>}></Route>
+                <Route path="/assentos/:idSessao" element={<Session film={film}/>}></Route>
                 <Route path="/Success" element={<Sucess />}></Route>
 
             </Routes>
