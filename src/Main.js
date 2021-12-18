@@ -1,35 +1,21 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import {Link} from "react-router-dom"
 
 
-export default function Main(){
-    const [film, setFilm] = useState([])
-    
+export default function Main({ film }) {
 
-    useEffect(()=> {
-        const promisse = axios.get("https://mock-api.driven.com.br/api/v4/cineflex/movies")
-
-        promisse.then((resp => {
-            setFilm(resp.data)
-            
-        }))
-    },[])
-
-    
-
-    return(
+    return (
         <div className="filmsContent">
             <div className="spanTop">
                 <span >Selecione o filme</span>
             </div>
             <div className="films">
-                {film.map((posterURL, index)=> 
-                    <div className="film">
-                        <img src={film[index].posterURL}  alt={film[index].title}/>
-                    </div>
+                {film.map((f, i) =>
+                    <Link to={`/sessoes/${i}`} key={i}>
+                        <div className="film">
+                            <img src={f.posterURL} alt={f.title} />
+                        </div>
+                    </Link>
                 )}
-                
-                
             </div>
         </div>
     )

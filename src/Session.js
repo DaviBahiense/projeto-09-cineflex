@@ -1,14 +1,41 @@
+import { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import axios from 'axios';
 
-const seat = [...Array(50).keys()]
 export default function Session(){
+
+    const [seats, setSeats] = useState([])
+    const { idSessao } = useParams()
+
+    useEffect(() => {
+        const promisse = axios.get(`https://mock-api.driven.com.br/api/v4/cineflex/showtimes/${idSessao}/seats`)
+        promisse.then(response => {
+            setSeats(response.data.seats)  
+           /*  seats.forEach(seat => {
+            }); */
+                seats.isSelected = false;
+        })
+    }, [])
+
+    const [clicked, setClicked] = useState(false);
+
     return(
         <>
          <div className="spanTop">
             <span >Selecione o(s) assento(s)</span>
         </div>
         <div className="containSit">
-            {seat.map((info)=>(
-                <div className="sit">{info +1}</div>
+            {seats.map((info)=>(
+                <div className={
+                `
+                sit 
+                ${(!info.isAvailable) && 'unavailable'} 
+                ${(!info.isSelected) && ' selected'}
+                ${clicked && 'selected'}
+                `
+            } 
+                onClick={()=> setClicked(true)}
+                key={info.id} >{info.name}</div>
             ))}
         </div>
         <legend>
@@ -21,8 +48,8 @@ export default function Session(){
                 <span>Disponível</span>
             </div>
             <div className="order">
-                    <div className="sit unavailable"></div>
-                    <span>Indisponivel</span>
+                <div className="sit unavailable"></div>
+                <span>Indisponivel</span>
             </div>
         </legend>
         <div className="input">
