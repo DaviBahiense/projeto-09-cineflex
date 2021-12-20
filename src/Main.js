@@ -1,6 +1,5 @@
 import {Link} from "react-router-dom"
 
-
 export default function Main({ film }) {
 
     return (
@@ -10,9 +9,10 @@ export default function Main({ film }) {
             </div>
             <div className="films">
                 {film.map((f, i) =>
-                    <Link to={`/sessoes/${i}`} key={i}>
+                    <Link to={`/sessoes/${i +1}`} key={i}>
                         <div className="film">
                             <img src={f.posterURL} alt={f.title} />
+                           
                         </div>
                     </Link>
                 )}

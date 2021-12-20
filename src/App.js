@@ -10,7 +10,10 @@ import axios from 'axios';
 
 export default function App() {
 
-    const [film, setFilm] = useState([])
+
+    const [film, setFilm] = useState("")
+    const [final, setFinal] = useState({})
+    const [data, setData] = useState([])
 
     useEffect(() => {
         const promisse = axios.get("https://mock-api.driven.com.br/api/v4/cineflex/movies")
@@ -19,7 +22,6 @@ export default function App() {
         )
     }, [])
     
-
     if (film.length === 0) {
         return ''
     }
@@ -30,12 +32,9 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Main film={film} />}></Route>
                 <Route path="/sessoes/:idFilme" element={<Film film={film}/>}></Route>
-                <Route path="/assentos/:idSessao" element={<Session film={film}/>}></Route>
-                <Route path="/Success" element={<Sucess />}></Route>
-
+                <Route path="/assentos/:idSessao" element={<Session film={film} setFinal={setFinal} setData={setData}/>}></Route>
+                <Route path="/sucesso" element={<Sucess film={film} final={final} data={data}/>}></Route>
             </Routes>
         </BrowserRouter>
-
-
     )
 }

@@ -3,38 +3,79 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import Button from "./ButtonPost"
 
-export default function Session({ film }){
+export default function Session({ film, setFinal, setData }){
 
     const { idSessao } = useParams()
     const [seats, setSeats] = useState([])
-    /* console.log(film[idSessao].title) */
-    
+    const [hour, setHour] = useState([])
+    const [name, setName] = useState('')
+    const [cpf, setCpf] = useState('')
+    let selectedSeats = []
+    let seatNumber = []
+    const [objPost, setObjPost] = useState({})
+
+    //eslint-disable-next-line
+    useEffect(() => {objApi()}, [cpf, name, selectedSeats,])
+        
     useEffect(() => {
         const promisse = axios.get(`https://mock-api.driven.com.br/api/v4/cineflex/showtimes/${idSessao}/seats`)
         promisse.then(response => {
             setSeats(response.data.seats) 
+            setHour(response.data)
            
-        })
+            setData(response.data)
+        }) // eslint-disable-next-line
     }, [])
 
-
-function Assent({ children, avalible}){
+function Assent({ children, avalible, name, cpf, seat, number}){
+    
     const [selected, setSelected] = useState(false)
-
+    
+    function click(){
+        if(avalible){
+            if(selected){
+                selectedSeats=selectedSeats.filter(nu => nu !== seat)
+                seatNumber=seatNumber.filter(n => n !== number)
+                setSelected(false)
+            }else{
+                setSelected(true)
+                selectedSeats.push(seat)
+                seatNumber.push(number)
+            }
+        }  
+        else {alert("Não disponivel")}
+    }
     return(
-        <Contain
-            
+        <Contain 
             selected={selected}
             avalible ={avalible}
-            onClick ={() => {
-                if(avalible) selected ? setSelected(false) : setSelected(true)
-                else alert("Não disponivel")
-            }}
-        >
+            onClick ={() => {click()}}
+            >
             {children}
         </Contain>
     )
+}
+
+if (hour.length === 0) {
+    return ''
+}
+
+function objApi(data) {
+       setFinal({
+        seatNumber: seatNumber,
+        name: name,
+        cpf: cpf,
+        title: data
+        
+    })
+    
+    setObjPost({
+        ids: selectedSeats,
+        name: name,
+        cpf: cpf
+    }) 
 }
 
     return(
@@ -44,9 +85,9 @@ function Assent({ children, avalible}){
         </div>
         <div className="containSit">
             {seats.map((info)=>(
-                <Assent avalible={info.isAvailable} key={info.id}>
-                {info.name}
-                   
+                <Assent avalible={info.isAvailable} key={info.id} seat={info.id} number={info.name}>
+{                    
+}                {info.name}
                 </Assent>
             ))}
         </div>
@@ -67,24 +108,29 @@ function Assent({ children, avalible}){
         <div className="input">
             <div className="name">
                 <span>Nome do comprador:</span>
-                <input type="text" placeholder="   Digite seu nome..." />
+                <input onChange={e => setName(e.target.value)} value={name} type="text" placeholder="   Digite seu nome..." />
             </div>
+
             <div className="cpf">
                 <span>CPF do comprador:</span>
-                <input type="text" placeholder="   Digite seu CPF..." />
+                <input onChange={e => setCpf(e.target.value)} value={cpf} type="number" placeholder="   Digite seu CPF..." />
             </div>
+            
         </div>
         <div className="reserve">
-            <button>Reservar assento(s)</button>
+            <Link to="/sucesso">
+                <Button obj={objPost}/>
+            </Link>
         </div>
         <footer>
             <div className="molding">
               
-                <img src="" alt="" />
+            <img src={hour.movie.posterURL} alt="" />
+                
             </div>
             <div className="span">
-                <span>Enola Holmes</span>
-                <span>Quinta-Feira - 15:00</span>
+                <span>{hour.movie.title}</span>
+                <span>{hour.day.weekday} - {hour.name}</span> 
             </div>
         </footer>
         </>

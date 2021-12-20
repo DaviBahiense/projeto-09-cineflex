@@ -6,13 +6,14 @@ export default function Film({ film }) {
    
     const { idFilme } = useParams()
     const [session, setSession] = useState([])
+    
 
     useEffect(() => {
         const promisse = axios.get(`https://mock-api.driven.com.br/api/v4/cineflex/movies/${idFilme}/showtimes`)
         promisse.then(avalible => {
             setSession(avalible.data.days)  
         })
-    }, [])
+    }, [idFilme])
 
     return (
         <>
@@ -35,9 +36,9 @@ export default function Film({ film }) {
             </div>
             <footer>
                 <div className="molding">
-                    <img src={film[idFilme].posterURL} alt="" />
+                    <img src={film[idFilme - 1].posterURL} alt="" />
                 </div>
-                <span>{film[idFilme].title}</span>
+                <span>{film[idFilme - 1].title}</span>
             </footer>
         </>
     )
